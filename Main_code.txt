@@ -1,0 +1,138 @@
+#include "mbed.h"
+//#include "mbed2/299/TARGET_LPC1768/TARGET_NXP/TARGET_LPC176X/PeripheralNames.h"
+// #include "mbed2/299/drivers/DigitalIn.h"
+// #include "mbed2/299/drivers/DigitalOut.h"
+
+
+//Motors Control
+PwmOut pwm1 (p21); 
+DigitalOut dir1 (p20);
+
+//LED's
+DigitalOut Led_F1(LED1);
+DigitalOut Led_F2(LED2);
+DigitalOut Led_F3(LED3);
+DigitalOut Led_F4(LED4);
+
+
+//IR Sensors
+DigitalIn IR1 (p10);
+DigitalIn IR2 (p11);
+DigitalIn IR3 (p12);
+DigitalIn IR4 (p13);
+DigitalIn ULTRA (p14);
+
+
+
+int right_wheel_forwards(){
+    dir1=1;
+        
+        pwm1.period_ms(10);
+        pwm1=0.5;
+        
+        
+}
+
+int right_wheel_stop(){
+    dir1=1;
+    pwm1=0;
+}
+
+int right_wheel_backwards(){
+    dir1=0;
+    pwm1.period_ms(10);
+    pwm1=0.5;
+    
+        
+}
+
+// Functions:
+// int Sensor_Reading1(){
+//      Led_F1=0;
+//          int sensor_val=IR1.read();
+        
+        
+//          IR1.read();
+//          while (sensor_val==1){
+//              Led_F1=1;
+//              wait(1);
+//              return Led_F1;
+//              IR1.read();
+//          }
+//  }
+
+
+// int right_wheel_forwards(){
+//     dir1=1;
+        
+//         pwm1.period_ms(10);
+//         pwm1=0.5;
+//         wait_ms(8);
+//         while(1){
+
+//         }
+// }
+
+// int right_wheel_stop(){
+    
+//         while(1){
+//         }
+// }
+
+
+int main()  
+{
+while (1)
+{
+    int direction = 0;
+    int sensor_val = IR1.read();
+    IR1.read();
+    
+    right_wheel_forwards();
+
+    IR1.read();
+
+    while (sensor_val==1){
+        return right_wheel_stop();
+    }
+    
+
+
+    // do 
+    // {
+    //     IR1.read();
+    //     right_wheel_stop();
+    //     wait_ms(5);
+    // }
+    // while(sensor_val==1);
+
+    //right_wheel_backwards();
+
+}
+    while(1);
+}    
+    // right_wheel_backwards();
+ 
+    
+    
+
+    // int sensor_val=IR1.read();
+    // IR1.read();
+
+    // while (sensor_val==0){
+    //     return right_wheel_forwards();
+    //     //wait_ms(5);
+    //     IR1.read();
+    // }
+        // dir1=1;
+        
+        // pwm1.period_ms(10);
+        // pwm1=0.5;
+        // wait_ms(8);
+        // while(1){
+
+        // }
+
+    
+
+       
