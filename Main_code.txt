@@ -133,6 +133,25 @@ while (1)
 
         // }
 
+//UPDATED CODE 04/04/2025
+int main(){
+
+    while(1){
+        //right_wheel_forwards();
+        int sensor_val=IR1.read();
+
+        //IR1.read();
+        if (sensor_val==1){
+            pwm1=0;
+            
+            wait(3);
+        }
+        else{
+            right_wheel_forwards();      
+        }
+    }
+    return 0;
+    }
     
 
        
