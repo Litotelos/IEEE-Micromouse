@@ -1,0 +1,176 @@
+//         // Check for button press (detect when button goes from not pressed to pressed)
+//         if (Trigger == 0 && prevTrigger == 1) {
+            
+//             state = !state; // Freezes program
+
+//             // Motor trigger
+//             pwm1 = 0;
+//             dir1 = 0;
+
+
+
+
+//             wait_ms(500);  // Debounce
+//         }
+        
+//         // Update previous trigger state
+//         prevTrigger = Trigger;
+//         state = 1;
+        
+//         // If state is active, blink the LED
+//         if (state) 
+//     {
+
+//             // Motor states
+//             dir1 = 1;
+
+//             for(float speed = 0.0; speed <= 1.0; speed += 0.05) 
+//             {
+//             pwm1.write(speed);  // duty cycle 
+//             }
+            
+//             wait_ms(10000);
+            
+//             for (float speed = 1.0; speed >= 0.0; speed -= 0.10)
+//             {
+//                 pwm1.write(speed);
+//             }
+//             wait_ms(1000);
+            
+            
+//     }
+
+//      else {
+        
+            
+            
+//         }
+
+// }
+
+
+
+
+
+
+
+
+
+ }
+
+
+
+             
+        dir1 = 1;
+
+         for(float speed = 0.0; speed <= 1.0; speed += 0.05) 
+      {
+     pwm1.write(speed);  // duty cycle           }
+      }
+        }
+
+
+//         // Check for button press (detect when button goes from not pressed to pressed)
+//         if (Trigger == 0 && prevTrigger == 1) {
+            
+//             state = !state; // Freezes program
+
+//             // Motor trigger
+//             pwm1 = 0;
+//             dir1 = 0;
+
+
+
+
+//             wait_ms(500);  // Debounce
+//         }
+        
+//         // Update previous trigger state
+//         prevTrigger = Trigger;
+//         state = 1;
+        
+//         // If state is active, blink the LED
+//         if (state) 
+//     {
+
+//             // Motor states
+//             dir1 = 1;
+
+//             for(float speed = 0.0; speed <= 1.0; speed += 0.05) 
+//             {
+//             pwm1.write(speed);  // duty cycle 
+//             }
+            
+//             wait_ms(10000);
+            
+//             for (float speed = 1.0; speed >= 0.0; speed -= 0.10)
+//             {
+//                 pwm1.write(speed);
+//             }
+//             wait_ms(1000);
+            
+            
+//     }
+
+//      else {
+        
+            
+            
+//         }
+
+// }
+        
+       
+}
+}
+
+
+
+
+
+//Sensor_Reading1();
+
+
+       //int sensor_val=IR1.read();
+        
+        IR1.read();
+        while (IR1 == 0){
+            dir1 = 1;
+            pwm1 = 1;
+            pwm1.period_ms(10);
+            IR1.read();
+
+            for(float speed = 0.0; speed <= 1.0; speed += 0.05) 
+      {
+     pwm1.write(speed);  // duty cycle           }
+      }
+        }
+    }
+
+
+
+
+
+
+
+int main()  
+{
+    
+    int direction=0;
+    int sensor_val=IR1.read();
+    IR1.read();
+
+    wait(1);
+    
+    while (1){
+    right_wheel_forwards();
+    IR1.read();
+    }
+    IR1.read();
+    while (sensor_val==1){
+        return right_wheel_stop(); 
+        wait_ms(5);
+        IR1.read();
+        wait_ms(5);
+    }
+    IR1.read();

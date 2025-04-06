@@ -1,0 +1,109 @@
+#include "mbed.h"
+
+//Motors Control
+PwmOut pwm1 (p21); 
+DigitalOut dir1 (p20);
+
+//LED's
+DigitalOut Led_F1(LED1);
+DigitalOut Led_F2(LED2);
+DigitalOut Led_F3(LED3);
+DigitalOut Led_F4(LED4);
+
+
+//IR Sensors
+DigitalIn IR1 (p10);
+DigitalIn IR2 (p11);
+DigitalIn IR3 (p12);
+DigitalIn IR4 (p13);
+DigitalIn ULTRA (p14);
+
+
+
+int right_wheel_forwards(){
+    
+    dir1=1;
+    pwm1.period_ms(10);
+    pwm1=0.5;
+    wait(3);
+    pwm1=0;
+    wait(1);
+    
+        
+}
+
+
+int right_wheel_backwards(){
+    
+    dir1=0;
+    pwm1.period_ms(10);
+    pwm1=0.5;
+    wait(3);
+    pwm1=0;
+    wait(3);
+    
+  
+      
+}
+
+int move(){
+    //right_wheel_forwards();
+        int sensor_val1=IR1.read();
+        int sensor_val2=IR2.read();
+
+        //IR1.read();
+        if (sensor_val1==1){
+            pwm1=0;
+            wait(3);
+        }
+        else{
+            right_wheel_forwards();      
+        }
+        IR1.read();
+}
+
+
+//   int Sensor_Reading1(){
+//        Led_F1=0;
+     
+//            int sensor_val=IR1.read();
+        
+        
+//            IR1.read();
+//            while (sensor_val==1){
+//                Led_F1=1;
+//                wait(1);
+//                return Led_F1;
+//                IR1.read();
+//            }
+//   }
+
+
+
+
+
+
+
+int main(){
+
+        move();
+        move();
+        move();
+        pwm1=0;
+        // //right_wheel_forwards();
+        // int sensor_val=IR1.read();
+
+        // //IR1.read();
+        // if (sensor_val==1){
+        //     pwm1=0;
+            
+        //     wait(3);
+        // }
+        // else{
+        //     right_wheel_forwards();      
+        // }
+         return 0;
+    }
+   
+    
+    
