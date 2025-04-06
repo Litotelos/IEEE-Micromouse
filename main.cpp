@@ -40,7 +40,7 @@ DigitalOut Led_F4(LED4);
 
 // global variables
 bool Motor_State; // Forward and stopping
-int Distance_State; // Turning
+int Distance_State; // Forward mapping
 int Sensor_State; // Reading sensors
 
 int Left_Motor_Counter = 0; // Encoder global count tracker
@@ -92,8 +92,9 @@ int Direction_state(bool Motor_State) {
 
     }
     else // No  movement if the motors are false
-    {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+    {
         Right_Motor_Direction = 1;
+        Left_Motor_Direction = 1;
 
         Left_Motor_Pwm = 0;
         Right_Motor_Pwm = 0;
@@ -179,7 +180,7 @@ int Sensor_Reading(int Sensor_state)
 
 int Distance_readings(int Distance_state) // Distance function using the Ultrasonic sensor
 {
- Distance_state = Ultra.read() - 2; // Subtracting the tolerance
+ Distance_state = Ultra.read() - 2; // Subtracting the tolerance since ultra returns a float
     return(Distance_state);
 }
 
@@ -196,7 +197,7 @@ int main() {
     {
         Direction_state(1);
     }
-        Encoder_State(Motor_State,Left_Motor_Counter,Right_Motor_Counter)
+
 
 
     }//End of while loop
