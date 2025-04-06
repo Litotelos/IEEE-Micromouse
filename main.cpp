@@ -5,8 +5,8 @@
 DigitalIn Nine_Clock (p5);
 DigitalIn Nine_Data (p6);
 DigitalIn Nine_Protocol(p7);
-DigitalIn  Nine_Interrupt_one(p8);
-DigitalIn Nine_Interrupt_two(p9);
+InterruptIn  Nine_Interrupt_one(p8);
+InterruptIn Nine_Interrupt_two(p9);
 
 //IR Sensors (Pins 10 - 13)
 DigitalIn IR1 (p10); // L0 IR (Maps to LED 1)
