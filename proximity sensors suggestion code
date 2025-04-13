@@ -10,8 +10,6 @@ DigitalOut led4(LED4);
 Ticker sensorTicker;
 
 void read_sensors(){//read sensors
-
-    int value=0x7; //set value for testing
     
     //turn left 0011
     if (value==0x3){ 
