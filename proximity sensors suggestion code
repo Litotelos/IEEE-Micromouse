@@ -1,0 +1,40 @@
+//13/04/2025
+//suggestion for how proximity sensors could be read
+#include "mbed.h"
+
+BusOut proxsensors(p10,p11,p12,p13);
+DigitalOut led(LED1);
+DigitalOut led2(LED2);
+DigitalOut led3(LED3);
+DigitalOut led4(LED4);
+Ticker sensorTicker;
+
+void read_sensors(){//read sensors
+
+    int value=0x7; //set value for testing
+    
+    //turn left 0011
+    if (value==0x3){ 
+        led=1;
+        led2=1;
+    }
+    //u turn 1111
+    else if (value==0x15){
+        led=1;
+        led2=1;
+        led3=1;
+        led4=1;
+    }
+    //turn right 1100
+    else if(value==0x12){ 
+        led3=1;
+        led4=1;
+    }
+
+}
+int main(){
+        //read sensors every 5ms
+        sensorTicker.attach(&read_sensors, 0.0005);
+    }
+
+
