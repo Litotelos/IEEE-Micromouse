@@ -187,77 +187,8 @@ int main(){
     
     
 
-    //turnTicker.attach(right_wheel_forwards,0.0005);
-    
-
-
-
-
 
     
-    // wait(1);
-    // left_wheel_forwards();
-    // dir1=1;
-    // dir2=1;
-
-    // pwm1.period_ms(10);
-    // pwm2.period_ms(10);
-    // pwm1=0.5;
-    // pwm2=0.5;
-    // wait(8.3);
-
-    // pwm1=0;
-    // pwm2=0;
-    // wait(1);
-    
-    // while(1){
-    //     // Continuously read the sensor values inside the loop
-    //     //int sensor_val1 = IR1.read();
-    //     //int sensor_val2 = IR2.read();
-
-    
-    //     // Check for left turn condition
-    //     if (sensor_val1 == 1 && sensor_val2 == 0) {
-    //         // Turn left
-    //         pwm2 = 0;
-    //         pwm1 = 0;
-    //         dir2 = 1;
-    //         pwm2.period_ms(10);
-    //         pwm2 = 0.5;
-    //         wait(1);
-    //         pwm2 = 0;
-    //         wait(1);
-    //         // Re-read the sensors
-    //         sensor_val1 = IR1.read();
-    //         sensor_val2 = IR2.read();
-    //     }
-        
-
-    //     // Check for right turn condition
-    //     if (sensor_val1 == 0 && sensor_val2 == 1) {
-    //         // Turn right
-    //         pwm1 = 0;
-    //         pwm2 = 0;
-    //         dir1 = 1;
-    //         pwm1.period_ms(10);
-    //         pwm1 = 0.5;
-    //         wait(1);
-    //         pwm1 = 0;
-    //         wait(1);
-    //         // Re-read the sensors
-    //         sensor_val1 = IR1.read();
-    //         sensor_val2 = IR2.read();
-            
-    //     }
-        
-    //     // If both sensors are high, move forward
-    //     if (sensor_val1 == 1 && sensor_val2 == 1) {
-    //         move_forwads();
-    //         // Update sensor values inside the loop
-    //         sensor_val1 = IR1.read();
-    //         sensor_val2 = IR2.read();
-    //     }
-    // }
 }
 
    
