@@ -1,0 +1,65 @@
+// Ultrasonic Sensor (Pin 27-28)
+I2C Ultrasonic(p27,p28); // Ultrasonic sensor SDA pin Pin 9, SCL Pin 10
+//Clock frequency defined in the main function.
+const int UltraAddr = 0x57; //Ultrasonic address
+
+DigitalOut Statusled(Led1)
+DigitalOut Distanceled(Led2)
+
+int UltraState (int CurrentDistance ){
+    char cmd = 0x01;
+    char Distance[3]; // 3 byte buffer
+
+    if(Ultrasonic.write(UltraAddr << 1 , &cmd , 1 ) != 0){
+        return CurrentDistance;
+    }
+    if(Ultrasonic.read(UltraAddr << 1 | 1, Distance , 3) !=0)
+    {
+        return CurrentDistance;
+    }
+    //Initial distance reading
+    unsigned long CurrentReading = ((unsigned long)Distance[1] << 16) + ((unsigned long)Distance[2] << 8) + (unsigned long) Distance[2];
+    //Distance converstion
+    float ObjDistance = (CurrentReading + 0.5); // Round to nearest whole number
+    CurrentDistance = ObjDistance;
+    return CurrentDistance;
+    
+}
+
+int main() {
+    // Configure I2C frequency
+    Ultrasonic.frequency(100000);
+    
+    // Turn off LEDs initially
+    Statusled = 0;
+    Distanceled = 0;
+    
+    // Give time for the sensor to initialize
+    wait_ms(500);
+    
+    while(1) {
+        // Get distance measurement
+        int distance = UltraState();
+        
+        if (distance >= 0) {
+            // Reading succeeded - blink the status LED
+            statusLed = 1;
+            
+            // Optional: Light up the distance LED if object is within a certain range
+            // For example, if object is closer than 30cm
+            if (distance < 300) {
+                distanceLed = 1;
+            } else {
+                distanceLed = 0;
+            }
+        } else {
+            // Reading failed - keep status LED off
+            statusLed = 0;
+            distanceLed = 0;
+        }
+        
+        wait_ms(100);
+        statusLed = 0;  // Flash the LED
+        wait_ms(100);
+    }
+}
