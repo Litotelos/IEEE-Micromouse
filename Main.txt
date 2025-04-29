@@ -1,0 +1,235 @@
+// Check for obstacle directly ahead first
+if (distanceState < MIN_SAFE_DISTANCE) {
+    // Decide which way to turn based on side sensors
+    if (ir1Active || ir2Active) {  // Left side has obstacle
+        if (ir3Active || ir4Active) {  // Right side also has obstacle
+            performUTurn();  // Both sides blocked, U-turn
+        } else {
+            performRightTurn();  // Turn away from left-side obstacle
+        }
+    } else if (ir3Active || ir4Active) {  // Only right side has obstacle
+        performLeftTurn();  // Turn away from right-side obstacle
+    } else {
+        // No side obstacles detected, but front is blocked
+        // Use historical data or default direction
+        performLeftTurn();  // Default to left turn when uncertain
+    }
+} else {
+    // No immediate front obstacle
+    if ((ir1Active && ir2Active) && !(ir3Active || ir4Active)) {
+        // Strong left side obstacle - correct course right
+        slightRightTurn();
+    } else if ((ir3Active && ir4Active) && !(ir1Active || ir2Active)) {
+        // Strong right side obstacle - correct course left
+        slightLeftTurn();
+    } else {
+        // Path is clear or balanced obstacle detection
+        moveForward();
+    }
+}
+
+#include "mbed.h"
+
+
+// 9-Axis sensor (Pins 6-10)
+DigitalIn NineAxisClock(p5);
+DigitalIn NineAxisData(p6);
+DigitalIn NineAxisProtocol(p7);
+InterruptIn NineAxisInterrupt1(p8);
+InterruptIn NineAxisInterrupt2(p9);
+
+// IR Sensors (Pins 16-19)
+InterruptIn IR1(p16); // L0 IR (Maps to LED 1)
+InterruptIn IR2(p17); // L1 IR (Maps to LED 2)
+InterruptIn IR3(p18); // R1 IR (Maps to LED 3)
+InterruptIn IR4(p19); // R0 IR (Maps to LED 4)
+
+
+
+// Motors (Pins 21-28)
+// Directions
+DigitalOut RightMotorDirection(p22); // Direction for M2
+DigitalOut LeftMotorDirection(p24); // Direction for M1
+
+// PWM signals
+PwmOut LeftMotorPwm(p21); // Duty cycle for M1
+PwmOut RightMotorPwm(p23); // Duty cycle for M2
+
+// Encoders
+InterruptIn LeftEncoderA(p29);
+InterruptIn LeftEncoderB(p30);
+InterruptIn RightEncoderA(p25);
+InterruptIn RightEncoderB(p26);
+
+// Ultrasonic Sensor (Pin 27-28)
+I2C Ultrasonic(p27,p28); // Ultrasonic sensor SDA pin Pin 9, SCL Pin 10
+//Clock frequency defined in the main function.
+
+// Onboard Mbed LED's
+DigitalOut Led1(LED1);
+DigitalOut Led2(LED2);
+DigitalOut Led3(LED3);
+DigitalOut Led4(LED4);
+
+// Global variables
+bool MoveForward;       // Forward and stopping
+int DistanceState;         // Forward mapping
+
+int SensorState;           // Reading sensors//
+
+bool MultiplexState = true;  // 0: Sensor multiplexing
+
+int LeftMotorCounter = 0;      // Encoder global count tracker
+int RightMotorCounter = 0;     // Encoder global count tracker
+
+volatile bool LeftMotorDirectionState = true;
+volatile bool RightMotorDirectionState = true;
+
+// Global Tickers  
+Ticker SensorTicker; // For multiplexing handlers
+Ticker MotorTicker;
+
+
+// Sensor state storage
+bool IR1Value = false;
+bool IR2Value = false;
+bool IR3Value = false;
+bool IR4Value = false;
+
+
+
+// Set the direction and speed of motors based on the motor state
+void MotorDirection(bool MoveForward) {
+    if (MoveForward) { // Mouse moves forward movement if true
+        LeftMotorDirection = 1;
+        RightMotorDirection = 1;
+        LeftMotorPwm = 0.5;
+        RightMotorPwm = 0.5;
+    } else { // No movement if  false
+        LeftMotorDirection = 1;
+        RightMotorDirection = 1;
+        LeftMotorPwm = 0;
+        RightMotorPwm = 0;
+    }
+}
+
+// Motor Encoder functions
+void LeftEncoderHandler() {//should count whilst turning 
+    if (LeftEncoderB.read() == 0) { //  If B is 0 the wheel is rotating clockwise
+        LeftMotorCounter++;
+      
+    } else {
+        LeftMotorCounter--;
+    }
+}
+void RightEncoderHandler() {//should count whilst turning 
+    if (RightEncoderB.read() == 0) {
+        RightMotorCounter++;    
+    } else {
+        RightMotorCounter--;
+    }
+}
+
+void MotorHandler(){
+    
+    LeftEncoderA.rise(&LeftEncoderHandler);
+    LeftEncoderB.fall(&LeftEncoderHandler);
+
+    RightEncoderA.rise(&RightEncoderHandler);
+    RightEncoderA.fall(&RightEncoderHandler);
+}
+
+//Sensor functions
+//The handlers are functions we use if we need to target specific IR sensors
+void IR1Handler() {
+    if (MultiplexState == 0) { // Only process when this sensor group is active
+        IR1Value = IR1.read();
+        Led1 = IR1Value; // Turn LED on/off based on sensor state
+    }
+}
+void IR2Handler() {
+    if (MultiplexState == 1) { 
+        IR2Value = IR1.read();
+        Led2 = IR2Value; 
+    }
+}
+void IR3Handler() {
+    if (MultiplexState == 1) { 
+        IR3Value = IR3.read();
+        Led3 = IR3Value; 
+    }
+}
+void IR4Handler() {
+    if (MultiplexState == 0) { 
+        IR4Value = IR4.read();
+        Led4 = IR4Value; 
+    }
+}
+
+// Multiplexing for sensors
+void MultiplexHandler() {
+    //State switcher
+    MultiplexState = !MultiplexState;
+    
+    if (MultiplexState == 0){ // Reads sensors in group 0 ( IR 1 and 4)
+        IR1Value = IR1.read();
+        IR4Value = IR4.read();
+        
+        // Update LEDs to show when a sensor has been registered as on or off
+        Led1 = IR1Value;
+        Led4 = IR4Value;
+        
+         // Turn off LED's outside of group
+        Led2 = 0;
+        Led3 = 0;
+    } else { // Reads sensors in group 1 (IR 2 and 3)
+        IR2Value = IR2.read();
+        IR3Value = IR3.read();
+        
+        // Display Active sesnors with LED's
+        Led2 = IR2Value;
+        Led3 = IR3Value;
+        
+         // Turn off LED's outside of group
+        Led1 = 0;
+        Led4 = 0;
+    }
+    
+    
+}
+// Control turning based on sensor state
+
+void Turn(int TurnState) {
+
+
+}
+
+
+// Initialize all the interrupts and tickers
+void IRHandler() {
+    IR1.rise(&IR1Handler);
+    IR1.fall(&IR1Handler);
+    
+    IR2.rise(&IR2Handler);
+    IR2.fall(&IR2Handler);
+    
+    IR3.rise(&IR3Handler);
+    IR3.fall(&IR3Handler);
+    
+    IR4.rise(&IR4Handler);
+    IR4.fall(&IR4Handler);
+    
+    // Initialize ticker for sensor multiplexing - 10ms period (100Hz)
+    SensorTicker.attach(&MultiplexHandler, 0.01);
+}
+
+int main() {
+    // Initialising Components and variables
+
+    Ultrasonic.frequency(100000); // Setting the clock frequency to 100kHz
+    IRHandler();
+    // Main control loop
+    while (1) {
+      
+    }// End of main control loop
+}// End of main function
