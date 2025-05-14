@@ -42,7 +42,6 @@ Ticker UltraCheker; // Checks the Distance of the Ultrasonic
 Ticker UltraTimeOut;
 
 Ticker MultiplexChecker; //Ticker  to allw Interrupt based components sample at regular intervals *
-Ticker MotorChecker;
 
 // //Movement Variables
 bool MoveForward = false; // Forward and stopping *
