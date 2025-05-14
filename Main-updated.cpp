@@ -1,5 +1,4 @@
 #include "mbed.h"
-#include <cstdint>
 
 // IR Sensors (Pins 16-19)
 DigitalIn IR1(p16); // L0 IR (Maps to LED 1)
