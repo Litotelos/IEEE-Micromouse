@@ -34,7 +34,6 @@ DigitalOut Led4(LED4);
 
 // Global variables//
 //Timing variables
-// ultra
 Timer Startup; //Inital cooling period when turning on the mouse *
 Timer UltraMapper; // Initates the the Ultrasoninc reading  *
 Ticker UltraCheker; // Checks the Distance of the Ultrasonic
