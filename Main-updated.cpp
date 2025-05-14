@@ -153,10 +153,10 @@ void RightEncodeRise() {
     RightTicks++;
 }
 
-// void EncoderReset(){
-//     LeftMotorCounter = 0;
-//     RightMotorCounter = 0;
-// }
+void EncoderReset(){
+    LeftMotorCounter = 0;
+    RightMotorCounter = 0;
+}
 
 
 void TurnAround(bool UTurn){
@@ -167,31 +167,31 @@ void TurnAround(bool UTurn){
     RightMotorPwm = 0.1;
 }
 
-// // // Motor Encoder functions
-// void LeftEncoderHandler() {//should count whilst turning 
-//     if (LeftEncoderB.read() != LeftEncoderA.read()) { //  If B is 0 the wheel is rotating clockwise
-//         LeftMotorCounter++;
+ // Motor Encoder functions
+void LeftEncoderHandler() {//should count whilst turning 
+    if (LeftEncoderB.read() != LeftEncoderA.read()) { //  If B is 0 the wheel is rotating clockwise
+        LeftMotorCounter++;
       
-//     } else {
-//         LeftMotorCounter--;
-//     }
-// }
-// void RightEncoderHandler(){
-// if (RightEncoderB.read() != RightEncoderA.read()) {
-//         RightMotorCounter++;    
-//     } else {
-//         RightMotorCounter--;
-//     }
-// }
+    } else {
+        LeftMotorCounter--;
+    }
+}
+void RightEncoderHandler(){
+if (RightEncoderB.read() != RightEncoderA.read()) {
+        RightMotorCounter++;    
+    } else {
+        RightMotorCounter--;
+    }
+}
 
-// void MotorHandler(){
+void MotorHandler(){
 
-//     LeftEncoderA.rise(&LeftEncoderHandler);
-//     // LeftEncoderB.fall(&LeftEncoderHandler);
+    LeftEncoderA.rise(&LeftEncoderHandler);
+    LeftEncoderB.fall(&LeftEncoderHandler);
 
-//     RightEncoderA.rise(&RightEncoderHandler);
-//     // RightEncoderB.fall(&RightEncoderHandler);
-// }
+    RightEncoderA.rise(&RightEncoderHandler);
+    RightEncoderB.fall(&RightEncoderHandler);
+}
  
 void UltraStart(){
     UltraMapper.reset();
@@ -273,26 +273,26 @@ else if (DistanceState < 100) {
 
 //Control turning based on sensor state
 
-// void Turn() {
-//     //Check mapping algo 
-//     if (DistanceState <= 5) {
-//         TurnState = (IR1Value ? 0b0001 : 0) | (IR2Value ? 0b0010 : 0) | (IR3Value ? 0b0100 : 0) | (IR4Value ? 0b1000 : 0);
+void Turn() {
+    //Check mapping algo 
+    if (DistanceState <= 5) {
+        TurnState = (IR1Value ? 0b0001 : 0) | (IR2Value ? 0b0010 : 0) | (IR3Value ? 0b0100 : 0) | (IR4Value ? 0b1000 : 0);
        
-//         switch (TurnState) { 
-//             case 0b1100:  
-//                 MoveLeft(LeftMotor);
-//                 break;
+        switch (TurnState) { 
+            case 0b1100:  
+                MoveLeft(LeftMotor);
+                break;
 
-//             case 0b0011:  
-//                 MoveRight(RightMotor);
-//                 break;
+            case 0b0011:  
+                MoveRight(RightMotor);
+                break;
             
-//             case 0b1111: 
-//                 TurnAround(UTurn);
-//                 break;
-//         }
-//     }
-// }
+            case 0b1111: 
+                TurnAround(UTurn);
+                break;
+        }
+    }
+}
 
 
 int main() {
