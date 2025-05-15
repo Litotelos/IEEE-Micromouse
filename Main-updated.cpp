@@ -296,21 +296,20 @@ void Turn() {
 
 
 int main() {
-      // Initialize motors
-    LeftMotorPwm.period(0.0001);
-    RightMotorPwm.period(0.0001);
-    UltraHandler();
-    UltraCheker.attach(&UltraTriggerManager,0.25);
+startup.reset();
+startup.start();
+while(startup.read() < 5.0) {
     
-    // Set up encoder interrupts
-    LeftEncoderA.rise(&LeftEncodeRise);
-    RightEncoderA.rise(&RightEncodeRise);
+LeftMotorPwm.period(0.0001);
+RightMotorPwm.period(0.0001);
+UltraHandler();
+UltraCheker.attach(&UltraTriggerManager,0.25);
     
-    // Reset and end start up timer
-    Startup.reset();
-    Startup.stop();
-
-
+// Set up encoder interrupts
+LeftEncoderA.rise(&LeftEncodeRise);
+RightEncoderA.rise(&RightEncodeRise); 
+}
+startup.stop();
     // Main control loop
     while (1) {
     // UltraLeds();
